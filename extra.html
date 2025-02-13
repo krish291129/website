@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow: hidden;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0;
+}
+.text {
+  margin-top: 30px;
+}
+.username-container {
+  position: fixed;
+  margin: 20px 0 40px;
+  width: 320px;
+  margin-top: 240px;
+  margin-left: -175px;
+  padding: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.6); /* White border */
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Glowing effect */
+  backdrop-filter: blur(5px); /* Blur effect */
+  text-align: center;
+}
+
+.username-container input {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px #fff solid;
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 18px;
+  color: #fff;
+  outline: none;
+}
+
+.username-container label {
+  position: absolute;
+  top: 40px;
+  left: 20px;
+  font-size: 18px;
+  color: #fff;
+  transition: 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.username-container input:focus + label,
+.username-container input:not(:placeholder-shown) + label {
+  transform: translateY(-23px);
+  /* padding-top: 2px; */
+  /* padding-left: 10px; */
+  font-size: 14px;
+  color: lightgoldenrodyellow;
+  /* font-weight: bold; */
+}
+
+/* button{
+  width: 100%;
+  height: 6vh;
+  font-size: large;
+  border-radius: 10px;
+  padding: 6px;
+  background: linear-gradient(90deg, #03a9f4, #f441a5);
+  cursor: pointer;
+  border: none;
+  color: white;
+  margin-top: 20px;
+  transition: 0.3s ease-in-out;
+} */
+button:hover {
+  background: linear-gradient(90deg, #f441a5, #03a9f4);
+  transform: scale(1.05);
+}
+
+.stars {
+  width: 200%;
+  height: 200vh;
+  position: absolute;
+  background: url("https://www.transparenttextures.com/patterns/stardust.png");
+  animation: moveStars 20s linear infinite, twinkle 5s infinite linear;
+  z-index: -1;
+}
+@keyframes moveStars {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+@keyframes twinkle {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+.nebula {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 10%,
+    rgba(0, 0, 255, 0.2) 40%,
+    transparent 80%
+  );
+  animation: moveNebula 10s infinite linear;
+  z-index: -1;
+}
+@keyframes moveNebula {
+  0% {
+    transform: translateX(-10%) translateY(-10%) scale(1);
+  }
+  50% {
+    transform: translateX(10%) translateY(10%) scale(1.2);
+  }
+  100% {
+    transform: translateX(-10%) translateY(-10%) scale(1);
+  }
+}
+
+/* choice  */
+
+.choice-container {
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 50px;
+    position: fixed;
+    padding-top: 550px;
+    animation: fadeIn 0.01s ease-in-out forwards;
+}
+@keyframes slideRight  {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    40%{
+        opacity: 0.5;
+    }
+    70%{
+        /* transform: translateX(50%); */
+        opacity: 0.2;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.username-container.slide-out {
+    animation: slideRight  0.01s ease forwards;
+}
+
+/* Fade-in animation for subject selection */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* black hole */
+.black-hole {
+    position: fixed;
+    right: 10px;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+    transform: scale(0);
+    animation: blackHoleExpand 0.1s ease-in-out forwards;
+    z-index: 10;
+}
+
+/* Black Hole Expansion */
+@keyframes blackHoleExpand {
+    0% {
+        transform: scale(0);
+        right: 50px;
+    }
+    50% {
+        transform: scale(5);
+        right: 100px;
+    }
+    100% {
+        transform: scale(7);
+        right: 150px;
+    }
+}
+
+/* Username Container Absorption Animation */
+@keyframes absorbIntoBlackHole {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(100px) scale(0.8);
+        opacity: 0.5;
+    }
+    70% {
+        transform: translateX(150px) scale(0.5);
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateX(200px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* animation language */
+/* Hide Other Languages */
+.choice-container .box.hidden {
+    display: none;
+}
+
+/* Right Slide-out Animation for Selected Language */
+@keyframes slideRightLanguage {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(100px) scale(0.8);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateX(200px) scale(0);
+        opacity: 0;
+    }
+}
+
+.box.selected {
+    animation: slideRightLanguage 0.8s ease forwards;
+}
+
+/* Black Hole for Language Absorption */
+/* .black-hole-lang {
+    position: fixed;
+    right: 10px;
+    top: 55%;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+    transform: scale(0);
+    animation: blackHoleExpandLang 0.8s ease-in-out forwards;
+    z-index: 10;
+} */
+
+/* Black Hole Expansion for Language */
+/* @keyframes blackHoleExpandLang {
+    0% {
+        transform: scale(0);
+        right: 50px;
+    }
+    50% {
+        transform: scale(5);
+        right: 100px;
+    }
+    100% {
+        transform: scale(7);
+        right: 150px;
+    }
+} */
+
+
+.username-container.absorbed {
+    animation: absorbIntoBlackHole 0.8s ease forwards;
+}
+
+.choice1, .choice2 {
+    display: flex;
+    gap: 15px; /* Space between boxes */
+}
+
+.box {
+    width: 150px;
+    height: 100px;
+    border: 2px solid white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.box:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+#subject{
+    font-size: x-large;
+
+}
+.difficulty-container {
+    display: none;
+    text-align: center;
+    margin-top: 50px;
+    position: fixed;
+    padding-top: 250px;
+}
+
+.difficulty-options button {
+    width: 100px;
+    height: 40px;
+    margin: 10px;
+    border: 2px solid white;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.difficulty-options button:hover {
+    transform: scale(1.1);
+}
+
+#questionCount {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px;
+}
+
+button {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+
+/* -------------- */
+
+.quiz-container {
+    display: none;
+    text-align: center;
+    margin-top: 600px;
+    width: 40%;
+    padding-top: 50px;
+    border: 2px solid white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(246, 243, 246, 0.3);
+    position: fixed;
+}
+
+.quiz-info {
+    padding: 10px;
+    flex-direction: row;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.question-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.options button{
+    background-color: orange;
+}
+
+.option {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.option:hover {
+    transform: scale(1.05);
+}
+
+#nextBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(90deg, #f441a5, #03a9f4);
+    color: white;
+    cursor: pointer;
+}
+
+#nextBtn:hover {
+    transform: scale(1.1);
+}
+
+/* Difficulty Button - Add selected style */
+.difficulty-options button.selected {
+    background: linear-gradient(90deg, #f441a5, #03a9f4);
+    transform: scale(1.1);
+}
+
+/* Option Button - Selected Answer Style */
+.option.selected-option {
+    background: linear-gradient(90deg, #f441a5, #03a9f4);
+    transform: scale(1.05);
+}
+#timer{
+    padding-left: 500px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="nebula"></div>
+
+    <!-- Username Input Form -->
+    <form onsubmit="return myfunc()" id="frm">
+       <div class="user">
+        <div class="username-container">
+            <input type="text" class="username" id="username" placeholder=" " required>
+            <label class="username-label">Username</label>
+            <button type="submit" style=" width: 100%;
+            height: 6vh;
+            font-size: large;
+            border-radius: 10px;
+            padding: 6px;
+            background: linear-gradient(90deg, #03a9f4, #f441a5);
+            cursor: pointer;
+            border: none;
+            color: white;
+            margin-top: 20px;
+            transition: 0.3s ease-in-out;">Start</button>
+        </div>
+       </div>
+    </form>
+
+   <!-- Choice Quiz Layout -->
+   <div class="choice-container" id="choiceContainer">
+       <p id="subject">Select your subject</p>
+    <div class="choice1">
+        <div class="box" onclick="selectSubject(event)" id="js">JavaScript</div>
+        <div class="box" onclick="selectSubject(event)" id="py">Python</div>
+        <div class="box" onclick="selectSubject(event)">DS</div>
+        <div class="box" onclick="selectSubject(event)">DBMS</div>
+        <div class="box" onclick="selectSubject(event)">CSS</div>
+    </div>
+    <div class="choice2">
+        <div class="box" onclick="selectSubject(event)">Bootstrap</div>
+        <div class="box" onclick="selectSubject(event)">PHP</div>
+        <div class="box" onclick="selectSubject(event)">C</div>
+        <div class="box" onclick="selectSubject(event)">WD</div>
+        <div class="box" onclick="selectSubject(event)">Operating System</div>
+    </div>
+    <!-- <button onclick="showDifficultyOptions()" id="submitBtn">Submit</button> -->
+</div>
+
+<!-- Difficulty & Question Selection -->
+<div class="difficulty-container" id="difficultyContainer">
+    <p>Select Difficulty Level:</p>
+    <div class="difficulty-options">
+        <button onclick="selectDifficulty('Simple')">Simple</button>
+        <button onclick="selectDifficulty('Medium')">Medium</button>
+        <button onclick="selectDifficulty('Hard')">Hard</button>
+    </div>
+
+    <p>Select Number of Questions:</p>
+    <select id="questionCount">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+    </select>
+
+    <button onclick="startQuiz()">Start Quiz</button>
+</div>
+
+<!-- Quiz Section -->
+<div class="quiz-container" id="quizContainer">
+    <div class="quiz-info" style="padding: 10px;
+    flex-direction: row;
+    position: absolute;
+    top: 20px;
+    left: 20px;">
+        <p><strong>Subject:</strong> <span id="selectedSubjectText"></span></p>
+        <p><strong>Difficulty:</strong> <span id="selectedDifficultyText"></span></p>
+        <p><strong>Questions:</strong> <span id="selectedQuestionCount"></span></p>
+    </div>
+    <div class="question-box">
+        <p id="questionText">Question will appear here</p>
+    </div>
+    <div class="options">
+        <button class="option" onclick="selectOption(this)"></button>
+        <button class="option" onclick="selectOption(this)"></button>
+        <button class="option" onclick="selectOption(this)"></button>
+        <button class="option" onclick="selectOption(this)"></button>
+    </div>
+    
+    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+    <p id="timer" style="font-size: 22px; color: yellow; font-weight: bold;">Time Left: 30s</p>
+</div>
+
+<script>
+    let selectedSubject = "";
+    let selectedDifficulty = "";
+
+    function myfunc() {
+    var username = document.getElementById('username').value.trim();
+    var usernameContainer = document.querySelector('.username-container');
+
+    if (username !== "") {
+        // Create Black Hole dynamically
+        let blackHole = document.createElement("div");
+        blackHole.classList.add("black-hole");
+        document.body.appendChild(blackHole);
+
+        // Absorb username container into black hole
+        usernameContainer.classList.add("absorbed");
+
+        // Wait for absorption animation to complete
+        setTimeout(() => {
+            document.getElementById("frm").style.display = "none"; // Hide username form
+            blackHole.style.display = "none"; // Remove black hole
+            document.getElementById("choiceContainer").style.display = "flex"; // Show subjects
+        }, 1000); // Matches animation duration
+    }
+    return false;
+}
+
+
+let selectedQuestionCount = 0;
+let currentQuestionIndex = 0;
+let currentQuestions = [];
+
+const questions = {
+    JavaScript: [
+        { q: "What is JavaScript?", options: ["Language", "Framework", "Library", "Database"], answer: "Language" },
+        { q: "Which keyword is used for variable?", options: ["var", "int", "float", "char"], answer: "var" }
+    ],
+    Python: [
+        { q: "What is Python?", options: ["Snake", "Framework", "Language", "Browser"], answer: "Language" },
+        { q: "Which function is used for output?", options: ["echo", "print", "display", "write"], answer: "print" },
+        { q: "What is Python?", options: ["Snake", "Framework", "Language", "Browser"], answer: "Language" },
+    { q: "Which keyword is used to define a function in Python?", options: ["func", "def", "define", "function"], answer: "def" },
+    { q: "What is the correct file extension for Python files?", options: [".py", ".python", ".pyt", ".pt"], answer: ".py" },
+    { q: "Which of the following is an immutable data type in Python?", options: ["List", "Dictionary", "Tuple", "Set"], answer: "Tuple" },
+    { q: "How do you start a comment in Python?", options: ["//", "#", "/*", "--"], answer: "#" },
+    { q: "Which of the following is used to take user input in Python?", options: ["input()", "scan()", "read()", "get()"], answer: "input()" },
+    { q: "Which function is used to find the length of a string in Python?", options: ["count()", "size()", "length()", "len()"], answer: "len()" },
+    { q: "What is used to iterate over a sequence in Python?", options: ["for loop", "while loop", "do-while loop", "foreach loop"], answer: "for loop" },
+    { q: "Which module is used for mathematical functions in Python?", options: ["math", "cmath", "numbers", "random"], answer: "math" },
+    { q: "What will be the output of print(2**3) in Python?", options: ["5", "6", "8", "9"], answer: "8" },
+    { q: "Which keyword is used for exception handling in Python?", options: ["catch", "error", "except", "try"], answer: "try" },
+    { q: "Which function is used to open a file in Python?", options: ["open()", "file()", "read()", "load()"], answer: "open()" },
+    { q: "What will be the output of print(type([]))?", options: ["<class 'list'>", "<class 'dict'>", "<class 'tuple'>", "<class 'set'>"], answer: "<class 'list'>" },
+    { q: "Which of the following is a mutable data type?", options: ["Tuple", "String", "List", "Integer"], answer: "List" },
+    { q: "Which of the following methods can be used to remove an element from a list in Python?", options: ["delete()", "remove()", "discard()", "erase()"], answer: "remove()" },
+    { q: "Which statement is used to stop the execution of a loop in Python?", options: ["stop", "break", "exit", "end"], answer: "break" },
+    { q: "Which function is used to get a random number in Python?", options: ["rand()", "random()", "randint()", "randomize()"], answer: "randint()" },
+    { q: "Which of the following is used to create an empty set in Python?", options: ["{}", "set()", "[]", "emptyset()"], answer: "set()" },
+    { q: "Which operator is used for floor division in Python?", options: ["/", "//", "%", "**"], answer: "//" },
+    { q: "Which keyword is used to define a class in Python?", options: ["class", "def", "struct", "object"], answer: "class" },
+    { q: "Which built-in function is used to sort a list in Python?", options: ["sort()", "sorted()", "order()", "arrange()"], answer: "sorted()" },
+    { q: "Which function is used to convert a string to an integer in Python?", options: ["int()", "str()", "float()", "char()"], answer: "int()" },
+    { q: "Which of the following is a valid way to declare a dictionary in Python?", options: ["[]", "set()", "{}", "dict()"], answer: "dict()" },
+    { q: "Which method is used to remove all elements from a list in Python?", options: ["clear()", "removeAll()", "delete()", "pop()"], answer: "clear()" }
+        
+    ]
+};
+
+function selectSubject(event) {
+    let clickedBox = event.target;
+    let selectedLanguage = clickedBox.innerText;  
+
+    if (selectedLanguage !== "JavaScript" && selectedLanguage !== "Python") {
+        alert("This feature is coming soon.Please try aftre some days. Please select JavaScript or Python.");
+        return;
+    }
+
+    selectedSubject = selectedLanguage;  
+
+    let boxes = document.querySelectorAll(".box");
+    boxes.forEach(box => {
+        if (box !== clickedBox) {
+            box.classList.add("hidden");
+        }
+    });
+
+    let blackHoleLang = document.createElement("div");
+    blackHoleLang.classList.add("black-hole-lang");
+    document.body.appendChild(blackHoleLang);
+    clickedBox.classList.add("selected");
+
+    setTimeout(() => {
+        document.getElementById("choiceContainer").style.display = "none"; 
+        document.body.removeChild(blackHoleLang);
+        document.getElementById("difficultyContainer").style.display = "block";  
+    }, 1000);
+}
+
+
+
+    function showDifficultyOptions() {
+        if (selectedSubject === "") {
+            alert("Please select a subject first!");
+            return;
+        }
+        document.getElementById("choiceContainer").style.display = "none";
+        document.getElementById("difficultyContainer").style.display = "block";
+    }
+
+    function selectDifficulty(level) {
+    selectedDifficulty = level;
+    let buttons = document.querySelectorAll(".difficulty-options button");
+
+    // Remove 'selected' class from all buttons
+    buttons.forEach(btn => btn.classList.remove("selected"));
+
+    // Add 'selected' class to the clicked button
+    event.target.classList.add("selected");
+}
+
+    function startQuiz() {
+    selectedQuestionCount = parseInt(document.getElementById("questionCount").value);
+    
+    if (selectedDifficulty === "") {
+        alert("Please select a difficulty level!");
+        return;
+    }
+
+    if (questions[selectedSubject]) {
+        currentQuestions = questions[selectedSubject].slice(0, selectedQuestionCount);
+    } else {
+        alert("No questions found for this subject!");
+        return;
+    }
+
+    document.getElementById("selectedSubjectText").innerText = selectedSubject;
+    document.getElementById("selectedDifficultyText").innerText = selectedDifficulty;
+    document.getElementById("selectedQuestionCount").innerText = selectedQuestionCount;
+
+    document.getElementById("difficultyContainer").style.display = "none";
+    document.getElementById("quizContainer").style.display = "block";
+    
+    loadQuestion();
+}
+
+function loadQuestion() {
+    if (currentQuestionIndex >= currentQuestions.length) {
+        alert("Quiz Completed!");
+        document.getElementById("quizContainer").style.display = "none";
+        return;
+    }
+
+    let qData = currentQuestions[currentQuestionIndex];
+    document.getElementById("questionText").innerText = qData.q;
+
+    let options = document.querySelectorAll(".option");
+
+    // Reset all options and add new question
+    options.forEach((btn, i) => {
+        btn.innerText = qData.options[i];
+        btn.classList.remove("selected-option"); // Reset previous selection
+    });
+
+    startTimer(); // Start the 30-second timer when a new question loads
+}
+
+function selectOption(btn) {
+    let options = document.querySelectorAll(".option");
+
+    // Remove selected-option class from all options before setting new one
+    options.forEach(opt => opt.classList.remove("selected-option"));
+
+    // Add selected-option class to clicked option
+    btn.classList.add("selected-option");
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < currentQuestions.length) {
+        loadQuestion();
+    } else {
+        alert("Quiz Completed!");
+        document.getElementById("quizContainer").style.display = "none";
+    }
+}
+
+let timer; // Timer variable
+let timeLeft = 30; // Time in seconds
+
+function startTimer() {
+    timeLeft = 30; // Reset timer to 30 seconds
+    document.getElementById("timer").innerText = `Time Left: ${timeLeft}s`;
+
+    // Clear previous timer if any
+    clearInterval(timer);
+
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Time Left: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Time’s Up! Moving to next question.");
+            nextQuestion(); // Auto move to next question
+        }
+    }, 1000);
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow: hidden;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0;
+}
+.text {
+  margin-top: 30px;
+}
+.username-container {
+  position: fixed;
+  margin: 20px 0 40px;
+  width: 320px;
+  margin-top: 240px;
+  margin-left: -175px;
+  padding: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.6); /* White border */
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Glowing effect */
+  backdrop-filter: blur(5px); /* Blur effect */
+  text-align: center;
+}
+
+.username-container input {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px #fff solid;
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 18px;
+  color: #fff;
+  outline: none;
+}
+
+.username-container label {
+  position: absolute;
+  top: 40px;
+  left: 20px;
+  font-size: 18px;
+  color: #fff;
+  transition: 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.username-container input:focus + label,
+.username-container input:not(:placeholder-shown) + label {
+  transform: translateY(-23px);
+  /* padding-top: 2px; */
+  /* padding-left: 10px; */
+  font-size: 14px;
+  color: lightgoldenrodyellow;
+  /* font-weight: bold; */
+}
+
+button {
+  width: 100%;
+  height: 6vh;
+  font-size: large;
+  border-radius: 10px;
+  padding: 6px;
+  background: linear-gradient(90deg, #03a9f4, #f441a5);
+  cursor: pointer;
+  border: none;
+  color: white;
+  margin-top: 20px;
+  transition: 0.3s ease-in-out;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #f441a5, #03a9f4);
+  transform: scale(1.05);
+}
+
+.stars {
+  width: 200%;
+  height: 200vh;
+  position: absolute;
+  background: url("https://www.transparenttextures.com/patterns/stardust.png");
+  animation: moveStars 20s linear infinite, twinkle 5s infinite linear;
+  z-index: -1;
+}
+@keyframes moveStars {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+@keyframes twinkle {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+.nebula {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 10%,
+    rgba(0, 0, 255, 0.2) 40%,
+    transparent 80%
+  );
+  animation: moveNebula 10s infinite linear;
+  z-index: -1;
+}
+@keyframes moveNebula {
+  0% {
+    transform: translateX(-10%) translateY(-10%) scale(1);
+  }
+  50% {
+    transform: translateX(10%) translateY(10%) scale(1.2);
+  }
+  100% {
+    transform: translateX(-10%) translateY(-10%) scale(1);
+  }
+}
+
+/* choice  */
+
+.choice-container {
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 50px;
+    position: fixed;
+    padding-top: 550px;
+}
+
+.choice1, .choice2 {
+    display: flex;
+    gap: 15px; /* Space between boxes */
+}
+
+.box {
+    width: 150px;
+    height: 100px;
+    border: 2px solid white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.box:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+#subject{
+    font-size: x-large;
+
+}
+.difficulty-container {
+    display: none;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.difficulty-options button {
+    width: 100px;
+    height: 40px;
+    margin: 10px;
+    border: 2px solid white;
+    background: linear-gradient(90deg, #03a9f4, #f441a5);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.difficulty-options button:hover {
+    transform: scale(1.1);
+}
+
+#questionCount {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px;
+}
+
+button {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
