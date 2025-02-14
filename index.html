@@ -1,115 +1,36 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Quiz</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="nebula"></div>
-
-    <!-- Username Input Form -->
-    <form onsubmit="return myfunc()" id="frm">
-       <div class="user">
-        <div class="username-container">
-            <input type="text" class="username" id="username" placeholder=" " required>
-            <label class="username-label">Username</label>
-            <button type="submit">Start</button>
-        </div>
-       </div>
-    </form>
-
-   <!-- Choice Quiz Layout -->
-   <div class="choice-container" id="choiceContainer">
-       <p id="subject">Select your subject</p>
-    <div class="choice1">
-        <div class="box" onclick="selectSubject(event)">JavaScript</div>
-        <div class="box" onclick="selectSubject(event)">Python</div>
-        <div class="box" onclick="selectSubject(event)">DS</div>
-        <div class="box" onclick="selectSubject(event)">DBMS</div>
-        <div class="box" onclick="selectSubject(event)">CSS</div>
-    </div>
-    <div class="choice2">
-        <div class="box" onclick="selectSubject(event)">Bootstrap</div>
-        <div class="box" onclick="selectSubject(event)">PHP</div>
-        <div class="box" onclick="selectSubject(event)">C</div>
-        <div class="box" onclick="selectSubject(event)">WD</div>
-        <div class="box" onclick="selectSubject(event)">Operating System</div>
-    </div>
-    <button onclick="showDifficultyOptions()" id="submitBtn">Submit</button>
-</div>
-
-<!-- Difficulty & Question Selection -->
-<div class="difficulty-container" id="difficultyContainer">
-    <p>Select Difficulty Level:</p>
-    <div class="difficulty-options">
-        <button onclick="selectDifficulty('Simple')">Simple</button>
-        <button onclick="selectDifficulty('Medium')">Medium</button>
-        <button onclick="selectDifficulty('Hard')">Hard</button>
+  <div class="quiz-container">
+    <h2>JavaScript Quiz</h2>
+    <div id="question-selection">
+      <label for="question-count">Select number of questions:</label>
+      <select id="question-count">
+      </select>
+      <button id="start-quiz">Start Quiz</button>
     </div>
 
-    <p>Select Number of Questions:</p>
-    <select id="questionCount">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="20">20</option>
-        <option value="25">25</option>
-        <option value="30">30</option>
-    </select>
-
-    <button onclick="startQuiz()">Start Quiz</button>
-</div>
-
-<script>
-    let selectedSubject = "";
-    let selectedDifficulty = "";
-
-    function myfunc() {
-        var username = document.getElementById('username').value.trim();
-        if (username !== "") {
-            document.getElementById("frm").style.display = "none"; // Hide username form
-            document.getElementById("choiceContainer").style.display = "flex"; // Show subject choices
-        }
-        return false;
-    }
-
-    function selectSubject(event) {
-        let boxes = document.querySelectorAll(".box");
-        boxes.forEach(box => box.classList.remove("selected")); // Remove selection from all
-
-        let clickedBox = event.target;
-        clickedBox.classList.add("selected"); // Add selection class
-        selectedSubject = clickedBox.innerText;
-    }
-
-    function showDifficultyOptions() {
-        if (selectedSubject === "") {
-            alert("Please select a subject first!");
-            return;
-        }
-        document.getElementById("choiceContainer").style.display = "none"; // Hide subjects
-        document.getElementById("difficultyContainer").style.display = "block"; // Show difficulty options
-    }
-
-    function selectDifficulty(level) {
-        selectedDifficulty = level;
-        let buttons = document.querySelectorAll(".difficulty-options button");
-        buttons.forEach(btn => btn.classList.remove("selected"));
-        event.target.classList.add("selected");
-    }
-
-    function startQuiz() {
-        let questionCount = document.getElementById("questionCount").value;
-        if (selectedDifficulty === "") {
-            alert("Please select a difficulty level!");
-            return;
-        }
-        alert(`Starting Quiz!\nSubject: ${selectedSubject}\nDifficulty: ${selectedDifficulty}\nQuestions: ${questionCount}`);
-    }
-</script>
-
+    <div id="quiz-interface" style="display: none;">
+      <div id="question-container"></div>
+      <div class="controls">
+        <button id="prev-btn">Previous</button>
+        <button id="next-btn">Next</button>
+      </div>
+      <button id="submit-btn">Submit Quiz</button>
+      <div id="timers">
+        <div id="question-timer"></div>
+      </div>
+    </div>
+    
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
